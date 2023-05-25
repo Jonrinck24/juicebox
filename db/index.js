@@ -107,6 +107,10 @@ async function getUserById(userId){
     const setString = Object.keys(fields).map(
       (key, index) => `"${ key }"=$${ index + 1 }`
     ).join(', ');
+
+    // if (setString.length === 0){
+    //     return;
+    // }
   try {
 
     // return early if this is called without fields
@@ -114,7 +118,7 @@ async function getUserById(userId){
         await client.query(
             `UPDATE posts 
             SET ${ setString }
-            WHERE id=$id
+            WHERE id=${postId}
             RETURNING *;`, 
             Object.values(fields));
       
@@ -160,7 +164,7 @@ await addTagsToPost(postId, tagList);
       const { rows: postIds } = await client.query(`
         SELECT id
         FROM posts
-        WHERE "authorId"=$1;
+        WHERE "authorId"=${userId};
       `, [userId]);
   const posts = await Promise.all(postIds.map(
     post=> getPostById(post.id)
@@ -218,8 +222,9 @@ await addTagsToPost(postId, tagList);
    }
    async function addTagsToPost (postId, tagList){
     try {
-        const createPostTagPromises = tagList.map(
-            tag=> createPostTag(postId, tag.id)
+        
+        const createPostTagPromises = tagList.map ((tag)=> 
+        createPostTag(postId, tag.id)
         );
         await Promise.all(createPostTagPromises);
 
