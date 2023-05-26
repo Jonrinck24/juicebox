@@ -108,9 +108,9 @@ async function getUserById(userId){
       (key, index) => `"${ key }"=$${ index + 1 }`
     ).join(', ');
 
-    // if (setString.length === 0){
-    //     return;
-    // }
+    if (setString.length === 0){
+        return;
+    }
   try {
 
     // return early if this is called without fields
@@ -280,7 +280,16 @@ await addTagsToPost(postId, tagList);
       throw error;
     }
   } 
-
+async function getAllTags(){
+    try{
+        const {rows}  = await client.query(
+        `SELECT * FROM tags;`
+        );
+        return {rows}
+    }catch (error){
+        throw error;
+    }
+}
 
 module.exports ={
     client,
@@ -296,7 +305,8 @@ module.exports ={
     createPostTag,
     addTagsToPost,
     getPostById,
-    getPostsByTagName
+    getPostsByTagName,
+    getAllTags
     
 }
 
