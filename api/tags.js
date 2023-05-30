@@ -14,6 +14,7 @@ const tags = await getAllTags();
 res.send({
     tags
     })
+  
 });
 
 
