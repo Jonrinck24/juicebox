@@ -40,19 +40,21 @@ apiRouter.use(async (req, res, next) => {
   
     next();
   });
-  const postsRouter = require('./posts')
   const usersRouter = require('./users');
-  const tagsRouter = require('./tags');
-  apiRouter.use('/users', usersRouter);
-  apiRouter.use('/posts', postsRouter);
-  apiRouter.use('/tags', tagsRouter);
+apiRouter.use('/users', usersRouter);
 
-  apiRouter.use((error, req, res, next) => {
+const postsRouter = require('./posts');
+apiRouter.use('/posts', postsRouter);
+
+const tagsRouter = require('./tags');
+apiRouter.use('/tags', tagsRouter);
+
+apiRouter.use((error, req, res, next) => {
     res.send({
       name: error.name,
       message: error.message
     });
   });
+  
 
-
-module.exports = apiRouter; 
+module.exports = apiRouter;
