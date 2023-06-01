@@ -1,6 +1,7 @@
 const { Client } = require('pg');
-const client = new Client ('postgres://localhost:5432/juicebox-dev');
-
+require('dotenv').config();
+const connectionString = process.env.DATABASE_URL;
+const client = new Client ({connectionString})
 async function createUser({ 
     username, 
     password,
@@ -257,6 +258,14 @@ await addTagsToPost(postId, tagList);
         FROM posts
         WHERE id=$1;
         `, [postId])
+
+        if(!post){
+            throw{
+            name: "PostNotFoundError",
+            message: "Could not find a post with that postId"
+
+            }
+        }
 
         const { rows: tags }= await client.query(
             `SELECT tags.*

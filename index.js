@@ -1,6 +1,5 @@
 
-
-const PORT= 6543;
+// const PORT= 6543;
 const express = require('express');
 const server = express();
 
@@ -13,7 +12,7 @@ server.use(express.json())
 const {client} = require ('./db');
 client.connect();
 
-
+const PORT = process.env.PORT || 6543;
 
 server.use((req, res, next)=>{
     console.log("<___BODY Logger START___>");
@@ -23,6 +22,13 @@ server.use((req, res, next)=>{
 })
 
 
+server.get('/background/:color', (req, res, next) => {
+    res.send(`
+      <body style="background: ${ req.params.color };">
+        <h1>Hello World</h1>
+      </body>
+    `);
+  });
 
 
 
